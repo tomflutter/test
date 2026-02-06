@@ -1,16 +1,18 @@
-<h3>Master Item: {{ $data->nama }}</h3>
-<p>Supplier: {{ $data->supplier }}</p>
-<p>Jenis: {{ $data->jenis }}</p>
-<p>Harga Beli: {{ $data->harga_beli }}</p>
-<p>Laba: {{ $data->laba }}%</p>
-<p>Harga Jual: {{ $data->harga_beli + ($data->harga_beli * $data->laba / 100) }}</p>
+<h3>Master Item: {{ $item->nama }}</h3>
+
+<p>Supplier: {{ $item->supplier }}</p>
+<p>Jenis: {{ $item->jenis }}</p>
+<p>Harga Beli: {{ $item->harga_beli }}</p>
+<p>Laba: {{ $item->laba }}%</p>
+<p>Harga Jual: {{ $item->harga_beli + ($item->harga_beli * $item->laba / 100) }}</p>
 
 <h4>Kategori:</h4>
-@if($data->categories->isEmpty())
+
+@if($item->categories->isEmpty())
     <p>-</p>
 @else
     <ul>
-        @foreach($data->categories as $cat)
+        @foreach($item->categories as $cat)
             <li>{{ $cat->nama }} ({{ $cat->kode }})</li>
         @endforeach
     </ul>
