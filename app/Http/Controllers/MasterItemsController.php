@@ -84,11 +84,28 @@ class MasterItemsController extends Controller
     {
         if ($method === 'new') {
             $item = new MasterItem;
-            $kode = str_pad(MasterItem::count() + 1, 5, '0', STR_PAD_LEFT);
+            $kode = str_pad(MasterItem::max('id') + 1, 5, '0', STR_PAD_LEFT);
         } else {
             $item = MasterItem::findOrFail($id);
             $kode = $item->kode;
         }
+
+        $request->validate([
+    'nama'       => 'required|string|max:255',
+    'harga_beli' => 'required|numeric|min:0',
+    'laba'       => 'required|numeric|min:0|max:100',
+    'supplier'   => 'required|string',
+    'jenis'      => 'required|string',
+    'categories' => 'array'
+]);
+
+if ($request->hasFile('foto')) {
+    $file = $request->file('foto');
+    $filename = time().'_'.$file->getClientOriginalName();
+    $file->move(public_path('uploads/items'), $filename);
+    $item->foto = $filename;
+}
+
 
         $item->nama       = $request->nama;
         $item->harga_beli = $request->harga_beli;

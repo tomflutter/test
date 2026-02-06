@@ -56,7 +56,7 @@
                     <a class="btn btn-danger" href="{{ url('master-items/delete/'.$data->id) }}" 
                         onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                     <!-- Tambahkan tombol cetak/download -->
-    <a class="btn btn-primary" href="{{ route('master-items.excel') }}">Download Excel</a>
+    <a class="btn btn-primary" href="{{ url('master-items/excel/'.$data->id) }}">
     <a class="btn btn-secondary" href="{{ url('master-items/pdf/'.$data->id) }}">Download PDF</a>
                 </div>
             </div>

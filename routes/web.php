@@ -53,7 +53,7 @@ Route::get('categories/delete/{id}', [CategoryController::class, 'delete'])->nam
 Route::get('categories/pdf/{id}', [CategoryController::class, 'downloadPdf'])->name('categories.pdf');
 
 // Excel master items
-Route::get('/master-items/excel/{id}', [MasterItemsController::class, 'downloadExcelItem']);
+Route::get('master-items/excel/{id}', [MasterItemsController::class, 'downloadExcelItem']);
 
 
 Route::get('/master-items/pdf/{id}', [MasterItemsController::class, 'downloadPdf']);
