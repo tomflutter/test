@@ -1,12 +1,18 @@
-<h3>Master Item: {{ $item->nama }}</h3>
+<h3>Master Item</h3>
 
-<p>Supplier: {{ $item->supplier }}</p>
-<p>Jenis: {{ $item->jenis }}</p>
-<p>Harga Beli: {{ $item->harga_beli }}</p>
-<p>Laba: {{ $item->laba }}%</p>
-<p>Harga Jual: {{ $item->harga_beli + ($item->harga_beli * $item->laba / 100) }}</p>
+<p><strong>Kode Item:</strong> {{ $item->kode }}</p>
+<p><strong>Nama:</strong> {{ $item->nama }}</p>
+<p><strong>Supplier:</strong> {{ $item->supplier }}</p>
+<p><strong>Jenis:</strong> {{ $item->jenis }}</p>
+<p><strong>Harga Beli:</strong> {{ number_format($item->harga_beli) }}</p>
+<p><strong>Laba:</strong> {{ $item->laba }}%</p>
+<p><strong>Harga Jual:</strong>
+    {{ number_format($item->harga_beli + ($item->harga_beli * $item->laba / 100)) }}
+</p>
 
-<h4>Kategori:</h4>
+<hr>
+
+<h4>Kategori</h4>
 
 @if($item->categories->isEmpty())
     <p>-</p>
@@ -18,6 +24,10 @@
     </ul>
 @endif
 
+<hr>
+
 <footer>
-    <p>Dicetak: {{ now()->format('d-m-Y H:i:s') }}</p>
+    <small>
+        Dicetak: {{ now()->format('d-m-Y H:i:s') }}
+    </small>
 </footer>
