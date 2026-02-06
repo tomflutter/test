@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Category;
@@ -53,7 +52,7 @@ class MasterItemsController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data'   => $data
+            'data'   => $data,
         ]);
     }
 
@@ -95,37 +94,36 @@ class MasterItemsController extends Controller
             'supplier'   => 'required|string',
             'jenis'      => 'required|string',
             'categories' => 'nullable|array',
-            'foto'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'foto'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $item = $method === 'new'
-    ? new MasterItem()
-    : MasterItem::findOrFail($id);
+            ? new MasterItem()
+            : MasterItem::findOrFail($id);
 
-$item->nama       = $request->nama;
-$item->harga_beli = $request->harga_beli;
-$item->laba       = $request->laba;
-$item->supplier   = $request->supplier;
-$item->jenis      = $request->jenis;
+        $item->nama       = $request->nama;
+        $item->harga_beli = $request->harga_beli;
+        $item->laba       = $request->laba;
+        $item->supplier   = $request->supplier;
+        $item->jenis      = $request->jenis;
 
 // upload foto
-if ($request->hasFile('foto')) {
-    $file = $request->file('foto');
-    $filename = time().'_'.$file->getClientOriginalName();
-    $file->move(public_path('uploads/items'), $filename);
-    $item->foto = $filename;
-}
+        if ($request->hasFile('foto')) {
+            $file     = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/items'), $filename);
+            $item->foto = $filename;
+        }
 
-$item->save();
+        $item->save();
 
 // generate kode setelah ada ID
-if ($method === 'new') {
-    $item->kode = str_pad($item->id, 5, '0', STR_PAD_LEFT);
-    $item->save();
-}
+        if ($method === 'new') {
+            $item->kode = str_pad($item->id, 5, '0', STR_PAD_LEFT);
+            $item->save();
+        }
 
-$item->categories()->sync($request->categories ?? []);
-
+        $item->categories()->sync($request->categories ?? []);
 
         return redirect('master-items')->with('success', 'Data berhasil disimpan');
     }
@@ -145,9 +143,9 @@ $item->categories()->sync($request->categories ?? []);
     public function downloadPdf($id)
     {
         $item = MasterItem::with('categories')->findOrFail($id);
-        $pdf = PDF::loadView('master_items.pdf', compact('item'));
+        $pdf  = PDF::loadView('master_items.pdf', compact('item'));
 
-        return $pdf->download('master_item_'.$item->kode.'.pdf');
+        return $pdf->download('master_item_' . $item->kode . '.pdf');
     }
 
     /**
@@ -168,7 +166,7 @@ $item->categories()->sync($request->categories ?? []);
 
         return Excel::download(
             new \App\Exports\ArrayExport($data),
-            'master_item_'.$item->kode.'.xlsx'
+            'master_item_' . $item->kode . '.xlsx'
         );
     }
 }
