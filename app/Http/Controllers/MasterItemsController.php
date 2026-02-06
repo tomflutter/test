@@ -23,7 +23,7 @@ class MasterItemsController extends Controller
      */
     public function search(Request $request)
     {
-        $query = MasterItem::with('categories');
+        $query = MasterItem::query();
 
         if ($request->filled('kode')) {
             $query->where('kode', $request->kode);
@@ -49,7 +49,7 @@ class MasterItemsController extends Controller
             'harga_beli',
             'laba',
             'supplier'
-        )->orderBy('id')->get();
+        )->orderBy('id', 'desc')->get();
 
         return response()->json([
             'status' => 200,
@@ -94,33 +94,38 @@ class MasterItemsController extends Controller
             'laba'       => 'required|numeric|min:0|max:100',
             'supplier'   => 'required|string',
             'jenis'      => 'required|string',
-            'categories' => 'array',
+            'categories' => 'nullable|array',
             'foto'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        if ($method === 'new') {
-            $item = new MasterItem();
-            $item->kode = str_pad((MasterItem::max('id') ?? 0) + 1, 5, '0', STR_PAD_LEFT);
-        } else {
-            $item = MasterItem::findOrFail($id);
-        }
+        $item = $method === 'new'
+    ? new MasterItem()
+    : MasterItem::findOrFail($id);
 
-        // Upload foto
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/items'), $filename);
-            $item->foto = $filename;
-        }
+$item->nama       = $request->nama;
+$item->harga_beli = $request->harga_beli;
+$item->laba       = $request->laba;
+$item->supplier   = $request->supplier;
+$item->jenis      = $request->jenis;
 
-        $item->nama       = $request->nama;
-        $item->harga_beli = $request->harga_beli;
-        $item->laba       = $request->laba;
-        $item->supplier   = $request->supplier;
-        $item->jenis      = $request->jenis;
-        $item->save();
+// upload foto
+if ($request->hasFile('foto')) {
+    $file = $request->file('foto');
+    $filename = time().'_'.$file->getClientOriginalName();
+    $file->move(public_path('uploads/items'), $filename);
+    $item->foto = $filename;
+}
 
-        $item->categories()->sync($request->categories ?? []);
+$item->save();
+
+// generate kode setelah ada ID
+if ($method === 'new') {
+    $item->kode = str_pad($item->id, 5, '0', STR_PAD_LEFT);
+    $item->save();
+}
+
+$item->categories()->sync($request->categories ?? []);
+
 
         return redirect('master-items')->with('success', 'Data berhasil disimpan');
     }
@@ -142,7 +147,7 @@ class MasterItemsController extends Controller
         $item = MasterItem::with('categories')->findOrFail($id);
         $pdf = PDF::loadView('master_items.pdf', compact('item'));
 
-        return $pdf->download('master_item_' . $item->kode . '.pdf');
+        return $pdf->download('master_item_'.$item->kode.'.pdf');
     }
 
     /**
@@ -153,17 +158,17 @@ class MasterItemsController extends Controller
         $item = MasterItem::with('categories')->findOrFail($id);
 
         $data = [[
-            'Nama Item'     => $item->nama,
-            'Kategori'      => $item->categories->pluck('nama')->join(', '),
-            'Supplier'      => $item->supplier,
-            'Harga Beli'    => $item->harga_beli,
-            'Laba (%)'      => $item->laba,
-            'Harga Jual'    => $item->harga_beli + ($item->harga_beli * $item->laba / 100),
+            'Nama Item'  => $item->nama,
+            'Kategori'   => $item->categories->pluck('nama')->join(', '),
+            'Supplier'   => $item->supplier,
+            'Harga Beli' => $item->harga_beli,
+            'Laba (%)'   => $item->laba,
+            'Harga Jual' => $item->harga_beli + ($item->harga_beli * $item->laba / 100),
         ]];
 
         return Excel::download(
             new \App\Exports\ArrayExport($data),
-            'master_item_' . $item->kode . '.xlsx'
+            'master_item_'.$item->kode.'.xlsx'
         );
     }
 }

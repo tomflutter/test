@@ -14,17 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('master_items', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode');
-            $table->string('foto')->nullable();
-            $table->string('nama');
-            $table->integer('harga_beli');
-            $table->integer('laba');
-            $table->string('supplier');
-            $table->string('jenis');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+    $table->id();
+    $table->string('kode')->nullable()->unique();
+    $table->string('foto')->nullable();
+    $table->string('nama');
+    $table->integer('harga_beli');
+    $table->integer('laba');
+    $table->string('supplier');
+    $table->string('jenis');
+    $table->timestamps();
+    $table->softDeletes();
+});
+
     }
 
     /**
