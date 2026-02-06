@@ -1,21 +1,41 @@
-<h3>Master Item</h3>
+<h3 style="text-align:center">MASTER ITEM</h3>
 
-<p><strong>Kode Item:</strong> {{ $item->kode }}</p>
-<p><strong>Nama:</strong> {{ $item->nama }}</p>
-<p><strong>Supplier:</strong> {{ $item->supplier }}</p>
-<p><strong>Jenis:</strong> {{ $item->jenis }}</p>
-<p><strong>Harga Beli:</strong> {{ number_format($item->harga_beli) }}</p>
-<p><strong>Laba:</strong> {{ $item->laba }}%</p>
-<p><strong>Harga Jual:</strong>
-    {{ number_format($item->harga_beli + ($item->harga_beli * $item->laba / 100)) }}
-</p>
+<table width="100%" cellpadding="5">
+    <tr>
+        <td width="30%">Kode Item</td>
+        <td>: {{ $item->kode }}</td>
+    </tr>
+    <tr>
+        <td>Nama Item</td>
+        <td>: {{ $item->nama }}</td>
+    </tr>
+    <tr>
+        <td>Supplier</td>
+        <td>: {{ $item->supplier }}</td>
+    </tr>
+    <tr>
+        <td>Jenis</td>
+        <td>: {{ $item->jenis }}</td>
+    </tr>
+    <tr>
+        <td>Harga Beli</td>
+        <td>: {{ number_format($item->harga_beli) }}</td>
+    </tr>
+    <tr>
+        <td>Laba</td>
+        <td>: {{ $item->laba }}%</td>
+    </tr>
+    <tr>
+        <td>Harga Jual</td>
+        <td>: {{ number_format($item->harga_beli + ($item->harga_beli * $item->laba / 100)) }}</td>
+    </tr>
+</table>
 
 <hr>
 
-<h4>Kategori</h4>
-
+<strong>Kategori:</strong>
 @if($item->categories->isEmpty())
-    <p>-</p>
+    -
 @else
     <ul>
         @foreach($item->categories as $cat)
@@ -26,8 +46,6 @@
 
 <hr>
 
-<footer>
-    <small>
-        Dicetak: {{ now()->format('d-m-Y H:i:s') }}
-    </small>
-</footer>
+<small>
+    Dicetak: {{ now()->format('d-m-Y H:i:s') }}
+</small>
