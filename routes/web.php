@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MasterItemsController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +35,25 @@ Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsControl
 
 
 Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
+
+
+// Halaman index kategori
+Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+
+// Form tambah/edit kategori
+Route::get('categories/form/{method}/{id?}', [CategoryController::class, 'formView'])->name('categories.form');
+
+// Submit form
+Route::post('categories/form-submit/{method}/{id?}', [CategoryController::class, 'formSubmit'])->name('categories.submit');
+
+// Hapus kategori
+Route::get('categories/delete/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
+
+// PDF kategori
+Route::get('categories/pdf/{id}', [CategoryController::class, 'downloadPdf'])->name('categories.pdf');
+
+// Excel master items
+Route::get('/master-items/excel/{id}', [MasterItemsController::class, 'downloadExcelItem']);
+
+
+Route::get('/master-items/pdf/{id}', [MasterItemsController::class, 'downloadPdf']);

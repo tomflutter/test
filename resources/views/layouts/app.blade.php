@@ -31,7 +31,20 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <!-- Left Side Of Navbar -->
+<ul class="navbar-nav me-auto">
+    <li class="nav-item">
+        <a class="nav-link {{ request()->is('master-items*') ? 'active' : '' }}" href="{{ url('master-items') }}">
+            Master Items
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ request()->is('categories*') ? 'active' : '' }}" href="{{ url('categories') }}">
+            Kategori
+        </a>
+    </li>
+</ul>
+
 
                     </ul>
 
