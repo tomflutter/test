@@ -1,11 +1,11 @@
 <form method="POST" enctype="multipart/form-data">
     @csrf
 
-    @if($method == 'edit')
-    <div class="form-group">
-        <label>Kode Barang</label>
-        <input type="text" class="form-control" readonly value="{{ $item->kode }}">
-    </div>
+    @if ($method == 'edit')
+        <div class="form-group">
+            <label>Kode Barang</label>
+            <input type="text" class="form-control" readonly value="{{ $item->kode }}">
+        </div>
     @endif
 
     <div class="form-group">
@@ -29,7 +29,7 @@
         <label>Supplier</label>
         <select class="form-control" name="supplier" required>
             <option value="">--Pilih--</option>
-            @foreach(['Tokopaedi','Bukulapuk','TokoBagas','E Commurz','Blublu'] as $sup)
+            @foreach (['Tokopaedi', 'Bukulapuk', 'TokoBagas', 'E Commurz', 'Blublu'] as $sup)
                 <option value="{{ $sup }}" @selected($supplier == $sup)>{{ $sup }}</option>
             @endforeach
         </select>
@@ -41,7 +41,7 @@
         <label>Jenis</label>
         <select class="form-control" name="jenis" required>
             <option value="">--Pilih--</option>
-            @foreach(['Obat','Alkes','Matkes','Umum','ATK'] as $j)
+            @foreach (['Obat', 'Alkes', 'Matkes', 'Umum', 'ATK'] as $j)
                 <option value="{{ $j }}" @selected($jenis == $j)>{{ $j }}</option>
             @endforeach
         </select>
@@ -51,8 +51,8 @@
     <div class="form-group">
         <label>Foto Item</label>
         <input type="file" class="form-control" name="foto">
-        @if(!empty($item->foto))
-            <img src="{{ asset('uploads/items/'.$item->foto) }}" width="120" class="mt-2">
+        @if (!empty($item->foto))
+            <img src="{{ asset('uploads/items/' . $item->foto) }}" width="120" class="mt-2">
         @endif
     </div>
 
@@ -60,9 +60,8 @@
     <div class="form-group">
         <label>Kategori</label>
         <select name="categories[]" class="form-control" multiple>
-            @foreach($categories as $cat)
-                <option value="{{ $cat->id }}"
-                    @if(isset($item) && $item->categories->pluck('id')->contains($cat->id)) selected @endif>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat->id }}" @if (isset($item) && $item->categories->pluck('id')->contains($cat->id)) selected @endif>
                     {{ $cat->nama }}
                 </option>
             @endforeach
